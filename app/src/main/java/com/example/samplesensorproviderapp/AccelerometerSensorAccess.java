@@ -12,9 +12,9 @@ import com.hivemq.client.mqtt.mqtt5.Mqtt5Client;
 
 import java.util.UUID;
 
-public class LightSensorAccess implements SensorEventListener {
+public class AccelerometerSensorAccess implements SensorEventListener {
     private SensorManager sensorManager;
-    private Sensor mLight;
+    private Sensor mAcc;
     private TextView sensor_field;
     public static final String brokerURI = "54.147.89.192";
 
@@ -23,11 +23,11 @@ public class LightSensorAccess implements SensorEventListener {
             .serverHost(brokerURI)
             .buildBlocking();
 
-    public LightSensorAccess(SensorManager sm, TextView tv) {
+    public AccelerometerSensorAccess(SensorManager sm, TextView tv) {
         sensorManager = sm;
         sensor_field = tv;
-        mLight = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
-        sensorManager.registerListener(this, mLight, SensorManager.SENSOR_DELAY_NORMAL);
+        mAcc = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        sensorManager.registerListener(this, mAcc, SensorManager.SENSOR_DELAY_NORMAL);
         client.connect();
     }
 
@@ -38,14 +38,14 @@ public class LightSensorAccess implements SensorEventListener {
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
-        // The light sensor returns a single value.
-        float lux = event.values[0];
-        String value = String.format("%.0f", lux);
+        // The accelerometer sensor returns a single value.
+        float acc = event.values[0];
+        String value = String.format("%.2f", acc);
 
         // Publish the sensor value.
         publishSensor(value);
 
-        // Show luminosity value on the text field
+        // Show accelerometer value on the text field
         sensor_field.setText(value);
     }
 
@@ -56,7 +56,7 @@ public class LightSensorAccess implements SensorEventListener {
 
     public final void publishSensor(String value) {
         client.toAsync().publishWith()
-                .topic("light_sensor")
+                .topic("accelerometer")
                 .qos(MqttQos.AT_LEAST_ONCE)
                 .payload(value.getBytes())
                 .send();

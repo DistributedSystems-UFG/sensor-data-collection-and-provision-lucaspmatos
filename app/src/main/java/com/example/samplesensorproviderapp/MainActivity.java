@@ -18,7 +18,7 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE = "com.example.basicandroidmqttclient.MESSAGE";
-    public static final String brokerURI = "3.223.10.115";
+    public static final String brokerURI = "54.147.89.192";
 
     Activity thisActivity;
     TextView subMsgTextView;
@@ -82,9 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void switchToSensorsActivity(View view) {
         Intent intent = new Intent(this, AccessSensorsActivity.class);
-
         startActivity(intent);
     }
-
-
 }
